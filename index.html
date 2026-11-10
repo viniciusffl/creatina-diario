@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101713">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Creatina Diário">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Creatina Diário</title>
+<style>
+:root{color-scheme:dark;--bg:#101713;--panel:#19231d;--panel2:#202d25;--line:#2c3a31;--muted:#a5b2a9;--green:#a8e0b8;--green2:#28583a;--gold:#e5c27b}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#1c2b22 0,#101713 58%);color:#f4f7f4;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;min-height:100vh;padding:env(safe-area-inset-top) 18px calc(24px + env(safe-area-inset-bottom))}
+main{max-width:520px;margin:0 auto}.top{display:flex;align-items:center;justify-content:space-between;padding:20px 2px 26px}.brand{display:flex;align-items:center;gap:11px;font-weight:700;letter-spacing:-.3px}.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(145deg,#b4e8c1,#56896a);display:grid;place-items:center;color:#102017;font-size:22px}.pill{font-size:12px;color:var(--green);border:1px solid #45644e;border-radius:30px;padding:7px 11px}
+h1{font-size:32px;letter-spacing:-1.2px;margin:0 0 5px}.sub{color:var(--muted);font-size:14px;margin-bottom:23px}
+.card{background:linear-gradient(145deg,#202d25,#18221c);border:1px solid var(--line);border-radius:24px;padding:21px;margin-bottom:15px;box-shadow:0 14px 38px #0003}.cardhead{display:flex;align-items:center;justify-content:space-between}.eyebrow{font-size:11px;letter-spacing:1.2px;color:var(--muted);text-transform:uppercase;font-weight:700}.status{font-size:12px;border-radius:20px;padding:6px 10px;background:#493d24;color:#f0d79a}.status.done{background:#244b32;color:#b8ebc4}
+.dose{font-size:44px;font-weight:750;letter-spacing:-2px;margin:12px 0 0}.dose small{font-size:16px;color:var(--muted);letter-spacing:0}.time{color:var(--muted);font-size:13px;margin:0 0 19px}
+button{font:inherit;cursor:pointer}.primary{width:100%;border:0;border-radius:16px;padding:17px;background:linear-gradient(135deg,#b9ebc5,#83c998);color:#112018;font-weight:800;font-size:16px;box-shadow:0 8px 22px #80c89625}.primary:disabled{opacity:.75;cursor:default}.secondary{border:1px solid var(--line);background:#202d25;color:#e8f1e9;border-radius:13px;padding:11px 13px;font-size:13px}
+.sectiontitle{font-size:17px;font-weight:700;margin:23px 2px 13px}.week{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}.day{text-align:center;color:var(--muted);font-size:11px}.dot{width:35px;height:35px;margin:8px auto 0;border-radius:50%;background:#29352d;display:grid;place-items:center;color:#91a096;font-size:13px}.dot.done{background:#2b6840;color:#e0f6e5}.dot.today{outline:1px solid var(--gold);outline-offset:3px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:#202d25;border:1px solid var(--line);border-radius:18px;padding:16px}.stat strong{display:block;font-size:27px;letter-spacing:-1px}.stat span{color:var(--muted);font-size:12px}
+.row{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid var(--line);font-size:14px}.row:last-child{border:0}.row span{color:var(--muted)}
+.settings{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.settings input{width:105px;background:#101713;border:1px solid var(--line);border-radius:11px;padding:10px;color:#fff;font:inherit}
+.note{color:var(--muted);font-size:12px;line-height:1.5;margin:12px 2px 0}.toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#e3f6e8;color:#14231a;padding:12px 17px;border-radius:30px;font-size:13px;font-weight:700;box-shadow:0 8px 30px #0006;display:none;white-space:nowrap}
+footer{text-align:center;color:#718078;font-size:11px;padding:20px 0}
+</style>
+</head>
+<body>
+<main>
+  <div class="top"><div class="brand"><div class="logo">✦</div><span>Creatina Diário</span></div><div class="pill">SEU HÁBITO</div></div>
+  <h1>Um dia de cada vez.</h1>
+  <div class="sub" id="dateLabel"></div>
+  <section class="card">
+    <div class="cardhead"><span class="eyebrow">Dose de hoje</span><span class="status" id="status">Pendente</span></div>
+    <div class="dose"><span id="doseDisplay">5</span> <small>gramas</small></div>
+    <div class="time">Lembrete diário às <b id="timeDisplay">13:40</b></div>
+    <button class="primary" id="markBtn">✓ &nbsp; JÁ TOMEI!</button>
+    <p class="note" id="statusNote">Marque depois de tomar. Seu registro fica salvo neste aparelho.</p>
+  </section>
+
+  <div class="sectiontitle">Sua semana</div>
+  <section class="card">
+    <div class="week" id="week"></div>
+    <div class="row" style="margin-top:13px"><b>Registros nesta semana</b><strong id="weekCount">0 de 7</strong></div>
+  </section>
+
+  <div class="sectiontitle">Seu progresso</div>
+  <section class="stats">
+    <div class="stat"><strong id="streak">0 🔥</strong><span>Dias consecutivos</span></div>
+    <div class="stat"><strong id="total">0</strong><span>Total de dias registrados</span></div>
+  </section>
+
+  <div class="sectiontitle">Personalizar</div>
+  <section class="card">
+    <div class="row"><b>Quantidade por dia</b><div class="settings"><input id="doseInput" type="number" min="0.1" max="30" step="0.5" value="5"><span>g</span></div></div>
+    <div class="row"><b>Horário do lembrete</b><div class="settings"><input id="timeInput" type="time" value="13:40"></div></div>
+    <button class="secondary" id="saveSettings" style="margin-top:13px">Salvar preferências</button>
+    <p class="note">O horário fica registrado aqui. Para receber alertas mesmo com o app fechado, configure também um lembrete diário no app Lembretes do iPhone. Notificações em segundo plano numa versão web exigem um serviço de envio externo.</p>
+  </section>
+  <div class="sectiontitle">Histórico recente</div>
+  <section class="card" id="history"></section>
+  <footer>Seus dados ficam armazenados localmente neste navegador.</footer>
+</main>
+<div class="toast" id="toast"></div>
+<script>
+const $=id=>document.getElementById(id);
+const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+const get=(k,def)=>{try{return JSON.parse(localStorage.getItem(k))??def}catch{return def}};
+let records=get('creatina_records',{}), settings=get('creatina_settings',{dose:5,time:'13:40'});
+const fmt=(s)=>new Date(s+'T12:00:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
+function toast(t){$('toast').textContent=t;$('toast').style.display='block';setTimeout(()=>$('toast').style.display='none',2200)}
+function streak(){let n=0,d=new Date();while(records[d.toISOString().slice(0,10)]){n++;d.setDate(d.getDate()-1)}return n}
+function render(){
+ const t=today(),done=!!records[t],d=new Date();
+ $('dateLabel').textContent=d.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+ $('doseDisplay').textContent=settings.dose;$('timeDisplay').textContent=settings.time;
+ $('status').textContent=done?'Concluído':'Pendente';$('status').className='status'+(done?' done':'');
+ $('markBtn').textContent=done?'✓  REGISTRADO HOJE':'✓  JÁ TOMEI!';$('markBtn').disabled=done;
+ $('statusNote').textContent=done?`Registrado hoje às ${records[t]}. Amanhã tem mais!`:'Marque depois de tomar. Seu registro fica salvo neste aparelho.';
+ $('doseInput').value=settings.dose;$('timeInput').value=settings.time;
+ let week='',count=0;const names=['D','S','T','Q','Q','S','S'];
+ const start=new Date();start.setDate(start.getDate()-6);
+ for(let i=0;i<7;i++){let x=new Date(start);x.setDate(start.getDate()+i);let key=x.toISOString().slice(0,10),ok=!!records[key];if(ok)count++;week+=`<div class="day">${names[x.getDay()]}<div class="dot ${ok?'done':''} ${key===t?'today':''}">${ok?'✓':x.getDate()}</div></div>`}
+ $('week').innerHTML=week;$('weekCount').textContent=`${count} de 7`;
+ $('streak').textContent=streak()+' 🔥';$('total').textContent=Object.keys(records).length;
+ const keys=Object.keys(records).sort().reverse().slice(0,10);
+ $('history').innerHTML=keys.length?keys.map(k=>`<div class="row"><b>${fmt(k)}</b><span>✓ Tomou às ${records[k]}</span></div>`).join(''):'<p class="note">Seus registros aparecerão aqui depois da primeira confirmação.</p>';
+}
+$('markBtn').addEventListener('click',()=>{let t=today();if(!records[t]){records[t]=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});localStorage.setItem('creatina_records',JSON.stringify(records));render();toast('Boa! Dose registrada. 💪')}});
+$('saveSettings').addEventListener('click',()=>{let dose=Number($('doseInput').value),time=$('timeInput').value;if(!dose||dose<=0||dose>30||!time){toast('Confira a quantidade e o horário.');return}settings={dose,time};localStorage.setItem('creatina_settings',JSON.stringify(settings));render();toast('Preferências salvas!')});
+if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+render();
+</script>
+</body></html>
